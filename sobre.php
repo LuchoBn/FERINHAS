@@ -1,0 +1,1 @@
+<?php include 'includes/header.php'; ?><h2>Sobre nós</h2><p style='text-align:center;'>Plataforma para divulgação de artesanato da baixada santista.</p><?php include 'includes/footer.php'; ?>
