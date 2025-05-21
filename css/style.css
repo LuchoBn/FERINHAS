@@ -87,3 +87,267 @@ h2 {
     color: green;
     font-weight: bold;
 }
+
+.artesao-lista {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* <-- Esto centra horizontalmente */
+  gap: 20px;
+  padding: 20px;
+}
+
+.artesao-card {
+  background-color: #fdfdfd;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  width: 250px;
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.artesao-card:hover {
+  transform: scale(1.03);
+}
+
+.foto-artesao {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.btn-verde {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 15px;
+  background-color: #28a745;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.btn-verde:hover {
+  background-color: #218838;
+}
+
+.perfil-container {
+  display: flex;
+  align-items: center;
+  margin: 20px;
+}
+.foto-artesao {
+  width: 150px;
+  height: 150px;
+  border-radius: 20px;
+  object-fit: cover;
+  margin-right: 20px;
+}
+.info-artesao h2 {
+  margin: 0;
+}
+.produtos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: start;
+  margin: 20px;
+}
+.produto-card {
+  background-color: #def0dd;
+  border-radius: 15px;
+  padding: 10px;
+  width: 200px;
+  text-align: center;
+}
+.img-produto {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.botao {
+  background-color: #a6cbbf;
+  padding: 10px 20px;
+  color: #000;
+  text-decoration: none;
+  border-radius: 8px;
+}
+
+.sobre-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.titulo-pagina {
+  font-size: 32px;
+  color: #4a2e00;
+  margin-bottom: 30px;
+}
+
+.card-sobre {
+  background-color: #fff8f0;
+  border: 2px solid #d4a373;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  text-align: left;
+}
+
+.card-sobre h3 {
+  color: #8b4513;
+  margin-bottom: 15px;
+}
+
+.card-sobre p,
+.card-sobre ul {
+  font-size: 16px;
+  color: #333;
+  line-height: 1.6;
+}
+
+.card-sobre ul {
+  padding-left: 20px;
+  list-style-type: none;
+}
+
+.card-sobre li::before {
+  content: "✔️ ";
+  margin-right: 5px;
+  color: #4a2e00;
+}
+
+.form-busca {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.form-busca input[type="text"] {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.form-busca button {
+  padding: 6px 12px;
+  background-color: #4a2e00;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.form-busca button:hover {
+  background-color: #6e3c08;
+}
+
+.form-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fafafa;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.cadastro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.cadastro-form label {
+  font-weight: bold;
+  color: #333;
+}
+
+.cadastro-form input,
+.cadastro-form textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1em;
+}
+
+.cadastro-form button {
+  padding: 12px;
+  background-color: #28a745;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cadastro-form button:hover {
+  background-color: #218838;
+}
+
+.cadastro-ok {
+  text-align: center;
+  color: green;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.perfil-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.perfil-container {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 20px;
+    max-width: 900px;
+    background-color: #fff8f1;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.foto-artesao {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #e26a00;
+}
+
+.info-artesao h2 {
+    margin: 0;
+}
+
+.produtos-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.produto-card {
+    background-color: #e7f8ec;
+    padding: 15px;
+    border-radius: 12px;
+    width: 220px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.img-produto {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}

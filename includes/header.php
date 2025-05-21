@@ -10,7 +10,11 @@
 <header>
     <div class="top-bar">
         <div class="menu-icon">&#9776;</div>
-        <input type="text" placeholder="Buscar...">
+        <form action="buscar.php" method="GET" class="form-busca">
+           <input type="text" name="q" placeholder="Buscar produto..." required>
+           <button type="submit">🔍</button>
+        </form>
+
         <div class="user">
             <?php
                 if (isset($_SESSION['nome_cliente'])) {
