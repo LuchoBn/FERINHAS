@@ -15,17 +15,20 @@ if ($termo != '') {
   $result = mysqli_query($conn, $query);
 
   if (mysqli_num_rows($result) > 0) {
-    echo "<div class='produtos'>";
+    echo "<div class='artesao-lista'>"; // ex produto
     while ($row = mysqli_fetch_assoc($result)) {
-      echo "<div class='produto-card'>";
-      echo "<img src='img/produtos.png' alt='{$row['nome_produto']}' width='150'>";
-      echo "<h3>{$row['nome_produto']}</h3>";
-      echo "<p>{$row['descricao_produto']}</p>";
-      echo "<p><strong>Preço:</strong> R$ {$row['preco_produto']}</p>";
-      echo "<p><em>Artesão:</em> {$row['nome_artesao']}</p>";
-      echo "</div>";
-    }
+    $imagem = (!empty($row['imagem'])) ? $row['imagem'] : 'img/produtos.png';
+
+    echo "<div class='artesao-card'>";
+    echo "<img src='img/ex1.jpg' alt='{$row['nome_produto']}' class='foto-artesao'>";
+    echo "<h3>{$row['nome_produto']}</h3>";
+    echo "<p>{$row['descricao_produto']}</p>";
+    echo "<p><strong>Preço:</strong> R$ " . number_format($row['preco_produto'], 2, ',', '.') . "</p>";
+    echo "<p><em>Feito por:</em> {$row['nome_artesao']}</p>";
     echo "</div>";
+}
+
+echo "</div>";
   } else {
     echo "<p style='text-align:center;'>Nenhum produto encontrado.</p>";
   }

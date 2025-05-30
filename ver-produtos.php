@@ -2,27 +2,32 @@
 include 'includes/header.php';
 include 'includes/conexao.php';
 
-// Consulta todos os produtos com o nome do artesão
-$result = $conn->query("
-    SELECT p.*, a.nome_artesao 
-    FROM produto p 
+$sql = "
+    SELECT p.*, a.nome_artesao, a.id_artesao
+    FROM produto p
     JOIN artesao a ON p.id_artesao = a.id_artesao
-");
+";
+$result = $conn->query($sql);
+if (!$result) {
+    echo "<p style='color:red;'>Erro na consulta: " . $conn->error . "</p>";
+    include 'includes/footer.php';
+    exit;
+}
 
-// Título da página
 echo "<h2 class='menu'>Produtos em Exposição</h2><div class='artesao-lista'>";
 
 while ($row = $result->fetch_assoc()) {
-    // Se não tiver imagem cadastrada, usa imagem padrão
-    $imagem = (!empty($row['imagem'])) ? $row['imagem'] : 'img/produtos.png';
+    $img = !empty($row['imagem_produto'])
+        ? "uploads/arte/{$row['imagem_produto']}"
+        : "img/produtos.png";
 
-    echo "<div class='artesao-card'>";
-    echo "<img src='img/produtos.png' alt='{$row['nome_produto']}' class='foto-artesao'>";
+    echo "<a href='perfil_artesao.php?id={$row['id_artesao']}' class='artesao-card'>";
+    echo "<img src='{$img}' alt='{$row['nome_produto']}' class='foto-artesao'>";
     echo "<h3>{$row['nome_produto']}</h3>";
     echo "<p>{$row['descricao_produto']}</p>";
-    echo "<p><strong>Preço:</strong> R$ " . number_format($row['preco_produto'], 2, ',', '.') . "</p>";
-    echo "<p><em>Feito por:</em> {$row['nome_artesao']}</p>";
-    echo "</div>";
+    echo "<p><strong>R$ " . number_format($row['preco_produto'], 2, ',', '.') . "</strong></p>";
+    echo "<p><em>Feito por: {$row['nome_artesao']}</em></p>";
+    echo "</a>";
 }
 
 echo "</div>";

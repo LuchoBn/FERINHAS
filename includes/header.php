@@ -17,8 +17,8 @@
 
         <div class="user">
             <?php
-                if (isset($_SESSION['nome_cliente'])) {
-                    echo $_SESSION['nome_cliente'] . ' | <a href="logout.php">Sair</a>';
+                if (isset($_SESSION['nome_artesao'])) {
+                    echo $_SESSION['nome_artesao'] . ' | <a href="logout.php">Sair</a>';
                 } else {
                     echo '<a href="login.php">Entrar</a>';
                 }
