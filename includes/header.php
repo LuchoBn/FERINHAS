@@ -1,4 +1,5 @@
 <?php if (session_status() === PHP_SESSION_NONE) session_start(); ?>
+<?php include 'includes/conexao.php'; // para obter foto de perfil ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -9,7 +10,7 @@
 <body>
 <header>
     <div class="top-bar">
-        <div class="menu-icon">&#9776;</div>
+        <div id="menu-icon" class="menu-icon" aria-label="Abrir menu">&#9776;</div>
         <form action="buscar.php" method="GET" class="form-busca">
            <input type="text" name="q" placeholder="Buscar produto..." required>
            <button type="submit">🔍</button>
@@ -17,8 +18,23 @@
 
         <div class="user">
             <?php
-                if (isset($_SESSION['nome_artesao'])) {
-                    echo $_SESSION['nome_artesao'] . ' | <a href="logout.php">Sair</a>';
+                if (isset($_SESSION['id_artesao'])) {
+                    // Busca foto do artesão
+                    $stmt = $conn->prepare("SELECT foto_artesao FROM artesao WHERE id_artesao = ?");
+                    $stmt->bind_param('i', $_SESSION['id_artesao']);
+                    $stmt->execute();
+                    $stmt->bind_result($fotoPerfil);
+                    $stmt->fetch();
+                    $stmt->close();
+
+                    $imgSrc = !empty($fotoPerfil)
+                        ? "uploads/perfil/{$fotoPerfil}"
+                        : "img/padrao_artesao.png";
+
+                    // Exibe foto circular do mesmo tamanho do texto
+                    echo "<img class='user-photo' src='" . htmlspecialchars($imgSrc) . "' alt='Foto de perfil'  /> ";
+                    echo htmlspecialchars($_SESSION['nome_artesao']);
+                    echo " | <a href=\"logout.php\">Sair</a>";
                 } else {
                     echo '<a href="login.php">Entrar</a>';
                 }
@@ -36,3 +52,10 @@
     </div>
 </header>
 <main>
+
+<script>
+// Toggle menu para mobile
+document.getElementById('menu-icon').addEventListener('click', function() {
+    document.querySelector('nav.menu').classList.toggle('open');
+});
+</script>

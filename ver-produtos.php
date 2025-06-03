@@ -3,10 +3,11 @@ include 'includes/header.php';
 include 'includes/conexao.php';
 
 $sql = "
-    SELECT p.*, a.nome_artesao, a.id_artesao
-    FROM produto p
+    SELECT p.*, a.nome_artesao 
+    FROM produto p 
     JOIN artesao a ON p.id_artesao = a.id_artesao
-";
+    WHERE p.status_produto = 'aprovado'"
+    ;
 $result = $conn->query($sql);
 if (!$result) {
     echo "<p style='color:red;'>Erro na consulta: " . $conn->error . "</p>";

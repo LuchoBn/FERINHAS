@@ -1,22 +1,30 @@
 <?php
 session_start();
 include 'includes/conexao.php';
+require_once 'includes/password.php';
 
 $erro = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email_cliente'];
+    $email = $conn->real_escape_string($_POST['email_cliente']);
     $senha = $_POST['senha_cliente'];
 
-    $sql = "SELECT id_artesao, nome_artesao FROM artesao WHERE email_artesao = '$email' AND senha_artesao = '$senha'";
+    $sql = "SELECT id_artesao, nome_artesao, senha_artesao, role FROM artesao WHERE email_artesao = '$email'";
     $result = $conn->query($sql);
 
-    if ($result->num_rows > 0) {
+    if ($result && $result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $_SESSION['id_artesao'] = $row['id_artesao'];
-        $_SESSION['nome_artesao'] = explode(' ', $row['nome_artesao'])[0];
-        header("Location: index.php");
-        exit();
+
+        // Verificar contraseña usando password_verify
+        if (password_verify($senha, $row['senha_artesao'])) {
+            $_SESSION['id_artesao'] = $row['id_artesao'];
+            $_SESSION['nome_artesao'] = explode(' ', $row['nome_artesao'])[0];
+            $_SESSION['role'] = $row['role'];
+            header("Location: index.php");
+            exit();
+        } else {
+            $erro = "Email ou senha inválidos.";
+        }
     } else {
         $erro = "Email ou senha inválidos.";
     }

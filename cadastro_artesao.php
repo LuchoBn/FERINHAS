@@ -1,15 +1,19 @@
 <?php 
 include 'includes/header.php'; 
 include 'includes/conexao.php';
+require_once 'includes/password.php';  // ¡Muy importante!
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Formateo de texto: primera letra mayúscula
     $nome        = ucfirst(strtolower(trim($_POST['nome'])));
-    $email       = $_POST['email'];
-    $senha       = $_POST['senha'];
+    $email       = $conn->real_escape_string($_POST['email']);
+    $senha_raw   = $_POST['senha'];
     $descricao   = ucfirst(strtolower(trim($_POST['descricao'])));
-    $telefone    = trim($_POST['telefone']);
+    $telefone    = $conn->real_escape_string(trim($_POST['telefone']));
     $localizacao = ucfirst(strtolower(trim($_POST['localizacao'])));
+
+    // Hash de la contraseña
+    $senha_hash = password_hash($senha_raw, PASSWORD_DEFAULT);
 
     // Manejo de subida de foto
     $fotoNome = null;
@@ -22,17 +26,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         );
     }
 
-    // Inserción en BD
-    $sql = "INSERT INTO artesao 
-        (nome_artesao, email_artesao, senha_artesao, descricao_artesao, telefone_artesao, localizacao_artesao, foto_artesao)
-      VALUES
-        ('{$nome}','{$email}','{$senha}','{$descricao}','{$telefone}','{$localizacao}','{$fotoNome}')";
+    // Inserción en BD (usar prepared statement por seguridad)
+    $stmt = $conn->prepare("INSERT INTO artesao 
+        (nome_artesao, email_artesao, senha_artesao, descricao_artesao, telefone_artesao, localizacao_artesao, foto_artesao) 
+        VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssssss", $nome, $email, $senha_hash, $descricao, $telefone, $localizacao, $fotoNome);
 
-    if ($conn->query($sql) === TRUE) {
+    if ($stmt->execute()) {
         echo '<p class="cadastro-ok">Cadastro realizado com sucesso!</p>';
     } else {
-        echo '<p class="cadastro-ok" style="color:red;">Erro: ' . $conn->error . '</p>';
+        echo '<p class="cadastro-ok" style="color:red;">Erro: ' . $stmt->error . '</p>';
     }
+
+    $stmt->close();
 }
 ?>
 
@@ -59,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <label for="foto">Foto de perfil:</label>
     <input id="foto" name="foto" type="file" accept="image/*">
-    <img id="preview" src="#" alt="Preview" style="display:none; width:120px; margin-top:10px; border-radius:50%;">
+    <img id="preview" src="#" alt="Preview" style="display:none; width:120px; margin-top:10px; border-radius:50%; align-self:center;">
 
     <button type="submit">Cadastrar</button>
   </form>
@@ -78,4 +84,3 @@ document.getElementById('foto').addEventListener('change', function() {
 </script>
 
 <?php include 'includes/footer.php'; ?>
-
