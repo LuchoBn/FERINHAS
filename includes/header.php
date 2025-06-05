@@ -1,5 +1,5 @@
 <?php if (session_status() === PHP_SESSION_NONE) session_start(); ?>
-<?php include 'includes/conexao.php'; // para obter foto de perfil ?>
+<?php include 'includes/conexao.php'; ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -11,15 +11,16 @@
 <header>
     <div class="top-bar">
         <div id="menu-icon" class="menu-icon" aria-label="Abrir menu">&#9776;</div>
+
         <form action="buscar.php" method="GET" class="form-busca">
-           <input type="text" name="q" placeholder="Buscar produto..." required>
-           <button type="submit">🔍</button>
+            <input type="text" name="q" placeholder="Buscar produto..." required>
+            <button type="submit">🔍</button>
         </form>
 
         <div class="user">
             <?php
+            
                 if (isset($_SESSION['id_artesao'])) {
-                    // Busca foto do artesão
                     $stmt = $conn->prepare("SELECT foto_artesao FROM artesao WHERE id_artesao = ?");
                     $stmt->bind_param('i', $_SESSION['id_artesao']);
                     $stmt->execute();
@@ -31,8 +32,7 @@
                         ? "uploads/perfil/{$fotoPerfil}"
                         : "img/padrao_artesao.png";
 
-                    // Exibe foto circular do mesmo tamanho do texto
-                    echo "<img class='user-photo' src='" . htmlspecialchars($imgSrc) . "' alt='Foto de perfil'  /> ";
+                    echo "<img class='user-photo' src='" . htmlspecialchars($imgSrc) . "' alt='Foto de perfil' />";
                     echo htmlspecialchars($_SESSION['nome_artesao']);
                     echo " | <a href=\"logout.php\">Sair</a>";
                 } else {
@@ -41,21 +41,17 @@
             ?>
         </div>
     </div>
-    <nav class="menu">
+
+    <nav class="menu" id="nav-menu">
         <a href="index.php">Home</a>
         <a href="ver-artesaos.php">Artesãos</a>
         <a href="ver-produtos.php">Feirinhas hippies</a>
         <a href="sobre.php">Sobre nós</a>
     </nav>
+
     <div class="logo-central">
         <img src="img/logo.png" alt="Logo" height="120">
     </div>
 </header>
-<main>
 
-<script>
-// Toggle menu para mobile
-document.getElementById('menu-icon').addEventListener('click', function() {
-    document.querySelector('nav.menu').classList.toggle('open');
-});
-</script>
+<main>
