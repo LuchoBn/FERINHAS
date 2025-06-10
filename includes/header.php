@@ -19,7 +19,7 @@
 
         <div class="user">
             <?php
-            
+
                 if (isset($_SESSION['id_artesao'])) {
                     $stmt = $conn->prepare("SELECT foto_artesao FROM artesao WHERE id_artesao = ?");
                     $stmt->bind_param('i', $_SESSION['id_artesao']);
@@ -55,3 +55,4 @@
 </header>
 
 <main>
+<!-- apertura do "main", fechamento no footer.php -->

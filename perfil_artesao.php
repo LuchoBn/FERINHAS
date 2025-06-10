@@ -18,10 +18,7 @@ if (!$result || $result->num_rows == 0) {
 $artesao = $result->fetch_assoc();
 
 // Prepara foto de perfil
-$foto = !empty($artesao['foto_artesao'])
-    ? "uploads/perfil/{$artesao['foto_artesao']}"   
-    : "img/padrao_artesao.png";
-
+$foto = !empty($artesao['foto_artesao']) ? "uploads/perfil/{$artesao['foto_artesao']}" : "img/padrao_artesao.png";
 $nome = $artesao['nome_artesao'];
 $descricao = $artesao['descricao_artesao'];
 $contato = $artesao['telefone_artesao'];
@@ -42,6 +39,7 @@ echo "<div class='perfil-wrapper'>
 
 echo "<h3 class='menu' style='text-align:center;'>Produtos cadastrados</h3>";
 
+// Consulta produtos
 $sql_produtos = $sou_dono
     ? "SELECT * FROM produto WHERE id_artesao = $id_artesao"
     : "SELECT * FROM produto WHERE id_artesao = $id_artesao AND status_produto = 'aprovado'";
@@ -53,6 +51,7 @@ if ($result_prod && $result_prod->num_rows > 0) {
     while ($p = $result_prod->fetch_assoc()) {
         $img = !empty($p['imagem_produto']) ? "uploads/arte/{$p['imagem_produto']}" : "img/produtos.png";
         $status = $p['status_produto'];
+        $comentario = $p['comentario_moderacao'];
 
         // Estilo por status
         $classeStatus = 'produto-aprovado';
@@ -61,9 +60,9 @@ if ($result_prod && $result_prod->num_rows > 0) {
         if ($status === 'pendente') {
             $classeStatus = 'produto-pendente';
             $badge = "<span class='status-badge status-pendente'>⏳ Pendente</span>";
-        } elseif ($status === 'recusado') {
-            $classeStatus = 'produto-recusado';
-            $badge = "<span class='status-badge status-recusado'>❌ Recusado</span>";
+        } elseif ($status === 'rejeitado') {
+            $classeStatus = 'produto-rejeitado';
+            $badge = "<span class='status-badge status-rejeitado'>❌ Rejeitado</span>";
         }
 
         echo "<div class='artesao-card {$classeStatus}'>";
@@ -72,6 +71,11 @@ if ($result_prod && $result_prod->num_rows > 0) {
         echo   "<p>{$p['descricao_produto']}</p>";
         echo   "<p><strong>R$ " . number_format($p['preco_produto'], 2, ',', '.') . "</strong></p>";
         echo   "{$badge}";
+
+        // Mostrar comentário da revisão se rejeitado
+        if ($sou_dono && $status === 'rejeitado' && !empty($comentario)) {
+            echo "<p style='color:red; margin-top:5px;'><strong>Motivo da rejeição:</strong> {$comentario}</p>";
+        }
 
         if ($sou_dono) {
             echo "<div style='margin-top:10px;'>";

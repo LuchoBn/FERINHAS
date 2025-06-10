@@ -1,42 +1,35 @@
 <?php
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+function enviarEmailConfirmacao($emailDestino, $nome, $token) {
+    $apiKey = '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';  // Substitua pela sua chave API do Brevo
 
-// Inclui as classes do PHPMailer manualmente
-require __DIR__ . '/PHPMailer/src/Exception.php';
-require __DIR__ . '/PHPMailer/src/PHPMailer.php';
-require __DIR__ . '/PHPMailer/src/SMTP.php';
+    $data = [
+        'sender' => ['name' => 'Litoral Arte', 'email' => 'litoral.art.sp@gmail.com'],
+        'to' => [['email' => $emailDestino, 'name' => $nome]],
+        'subject' => 'Confirme seu cadastro',
+        'htmlContent' => "<p>Olá, $nome!</p>
+                          <p>Obrigado por se cadastrar. Para confirmar seu e-mail, clique no link abaixo:</p>
+                          <p><a href='http://hippie.ct.ws/confirmar.php?token=$token'>Confirmar e-mail</a></p>"
+    ];
 
-function enviarEmailConfirmacao($destinatario, $nome, $token) {
-    $mail = new PHPMailer(true);
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, 'https://api.brevo.com/v3/smtp/email');
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'accept: application/json',
+        'api-key: ' . $apiKey,
+        'content-type: application/json',
+    ]);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 
-    try {
-        // Configurações do servidor SMTP do Gmail
-        $mail->isSMTP();
-        $mail->Host       = 'smtp.gmail.com';
-        $mail->SMTPAuth   = true;
-        $mail->Username   = 'litoral.arte.sp@gmail.com';  // seu e-mail
-        $mail->Password   = 'xrva yxuc drnl brgr';         // senha de app do Gmail
-        $mail->SMTPSecure = 'tls';
-        $mail->Port       = 587;
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
 
-        // Remetente e destinatário
-        $mail->setFrom('litoral.arte.sp@gmail.com', 'Feirinha Hippie');
-        $mail->addAddress($destinatario, $nome);
-
-        // Conteúdo do e-mail
-        $mail->isHTML(true);
-        $mail->Subject = 'Confirmação de e-mail';
-
-        // LINK DE CONFIRMAÇÃO – MUITO IMPORTANTE: troque pelo seu domínio real
-        $link = "hippie.ct.ws/confirmar.php?token=$token";
-        $mail->Body    = "Olá $nome, clique no link abaixo para confirmar seu e-mail:<br><a href='$link'>$link</a>";
-
-        $mail->send();
+    if ($httpCode == 201) {
         return true;
-    } catch (Exception $e) {
-        // Para debugar você pode ativar o echo:
-        // echo "Erro ao enviar e-mail: {$mail->ErrorInfo}";
+    } else {
+        error_log("Erro ao enviar e-mail: $response");
         return false;
     }
 }

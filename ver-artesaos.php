@@ -2,7 +2,8 @@
 include 'includes/header.php';
 include 'includes/conexao.php';
 
-$result = $conn->query("SELECT * FROM artesao");
+$result = $conn->query("SELECT * FROM artesao WHERE confirmado = 1");
+
 if (!$result) {
     echo "<p style='color:red;'>Erro na consulta: " . $conn->error . "</p>";
     include 'includes/footer.php';

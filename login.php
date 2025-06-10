@@ -9,25 +9,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $conn->real_escape_string($_POST['email_cliente']);
     $senha = $_POST['senha_cliente'];
 
-    $sql = "SELECT id_artesao, nome_artesao, senha_artesao, role FROM artesao WHERE email_artesao = '$email'";
-    $result = $conn->query($sql);
+    $stmt = $conn->prepare("SELECT id_artesao, nome_artesao, senha_artesao, role, confirmado FROM artesao WHERE email_artesao = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
 
-    if ($result && $result->num_rows > 0) {
-        $row = $result->fetch_assoc();
+if ($result && $result->num_rows > 0) {
+    $row = $result->fetch_assoc();
 
-        // Verificar contraseña usando password_verify
-        if (password_verify($senha, $row['senha_artesao'])) {
-            $_SESSION['id_artesao'] = $row['id_artesao'];
-            $_SESSION['nome_artesao'] = explode(' ', $row['nome_artesao'])[0];
-            $_SESSION['role'] = $row['role'];
-            header("Location: index.php");
-            exit();
-        } else {
-            $erro = "Email ou senha inválidos.";
-        }
-    } else {
+    if (!password_verify($senha, $row['senha_artesao'])) {
         $erro = "Email ou senha inválidos.";
+    } elseif ($row['confirmado'] == 0) {
+        $erro = "Você precisa confirmar seu e-mail antes de fazer login.";
+    } else {
+        $_SESSION['id_artesao'] = $row['id_artesao'];
+        $_SESSION['nome_artesao'] = explode(' ', $row['nome_artesao'])[0];
+        $_SESSION['role'] = $row['role'];
+        header("Location: index.php");
+        exit();
     }
+} else {
+    $erro = "Email ou senha inválidos.";
+}
+
+$stmt->close();
+
 }
 ?>
 
