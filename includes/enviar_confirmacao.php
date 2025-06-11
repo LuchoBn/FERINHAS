@@ -1,6 +1,9 @@
 <?php
+require_once 'carregar_env.php';
+carregarEnv(__DIR__ . '/brevo.env'); 
+
 function enviarEmailConfirmacao($emailDestino, $nome, $token) {
-    $apiKey = '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';  // Substitua pela sua chave API do Brevo
+    $apiKey = getenv('BREVO_API_KEY');  
 
     $data = [
         'sender' => ['name' => 'Litoral Arte', 'email' => 'litoral.art.sp@gmail.com'],
@@ -14,7 +17,7 @@ function enviarEmailConfirmacao($emailDestino, $nome, $token) {
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, 'https://api.brevo.com/v3/smtp/email');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [ //1930
         'accept: application/json',
         'api-key: ' . $apiKey,
         'content-type: application/json',
