@@ -1,6 +1,6 @@
 <?php
 function enviarEmailConfirmacao($emailDestino, $nome, $token) {
-    $apiKey = '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';  // Substitua pela sua chave API do Brevo
+    $apiKey = ;  // Substitua pela sua chave API do Brevo
 
     $data = [
         'sender' => ['name' => 'Litoral Arte', 'email' => 'litoral.art.sp@gmail.com'],
